@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academia Tomy 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#1a0a2e;min-height:100vh;overflow-x:hidden}
+.stars-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{0%{opacity:.3}100%{opacity:1}}
+.app{position:relative;z-index:1;padding:16px 12px;max-width:720px;margin:0 auto}
+h1.title{font-family:'Fredoka One',cursive;font-size:36px;color:#FFD700;text-align:center;text-shadow:0 0 20px #FF6B35;margin-bottom:4px;animation:pulse 2s ease-in-out infinite alternate}
+@keyframes pulse{0%{transform:scale(1)}100%{transform:scale(1.03)}}
+.subtitle{text-align:center;color:#C9B8FF;font-size:14px;margin-bottom:20px}
+.nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.nav-btn{font-family:'Fredoka One',cursive;font-size:14px;padding:10px 16px;border-radius:50px;border:2px solid transparent;cursor:pointer;transition:all .2s;font-weight:400}
+.nav-btn.active{transform:scale(1.08);border-color:#FFD700}
+.btn-poke{background:#FF3B47;color:#fff}.btn-poke.active{box-shadow:0 0 15px #FF3B47}
+.btn-dino{background:#22C55E;color:#fff}.btn-dino.active{box-shadow:0 0 15px #22C55E}
+.btn-foot{background:#3B82F6;color:#fff}.btn-foot.active{box-shadow:0 0 15px #3B82F6}
+.btn-magic{background:#A855F7;color:#fff}.btn-magic.active{box-shadow:0 0 15px #A855F7}
+.btn-math{background:#F59E0B;color:#fff}.btn-math.active{box-shadow:0 0 15px #F59E0B}
+.section{display:none;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+.card{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:20px;padding:20px;margin-bottom:16px;backdrop-filter:blur(4px)}
+.card-title{font-family:'Fredoka One',cursive;font-size:20px;color:#FFD700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emoji-big{font-size:28px}
+.question{color:#E2D9FF;font-size:16px;margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:14px;padding:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.choice:hover{background:rgba(255,255,255,.2);transform:scale(1.03)}
+.choice.correct{background:#22C55E;border-color:#16A34A;animation:bounce .4s ease}
+.choice.wrong{background:#EF4444;border-color:#DC2626}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.feedback{margin-top:12px;padding:12px;border-radius:12px;font-weight:700;font-size:15px;text-align:center}
+.feedback.win{background:rgba(34,197,94,.2);color:#86EFAC;border:1px solid #22C55E}
+.feedback.lose{background:rgba(239,68,68,.2);color:#FCA5A5;border:1px solid #EF4444}
+.next-btn{display:block;margin:14px auto 0;font-family:'Fredoka One',cursive;font-size:16px;padding:10px 28px;background:#FFD700;color:#1a0a2e;border:none;border-radius:50px;cursor:pointer;transition:all .2s}
+.next-btn:hover{transform:scale(1.05);background:#FFC107}
+.score-bar{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.08);border-radius:50px;padding:8px 16px;margin-bottom:16px}
+.score-label{color:#C9B8FF;font-size:13px}
+.score-val{font-family:'Fredoka One',cursive;font-size:20px;color:#FFD700}
+.progress{background:rgba(255,255,255,.1);border-radius:50px;height:8px;margin-bottom:16px;overflow:hidden}
+.progress-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#FF6B35,#FFD700);transition:width .5s ease}
+.count-game{text-align:center}
+.dino-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0;font-size:28px}
+.num-choices{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.num-choice{font-family:'Fredoka One',cursive;font-size:22px;width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.num-choice:hover{transform:scale(1.1);border-color:#FFD700}
+.num-choice.correct{background:#22C55E;border-color:#16A34A}
+.num-choice.wrong{background:#EF4444;border-color:#DC2626}
+.sum-display{font-family:'Fredoka One',cursive;font-size:36px;color:#FFD700;text-align:center;margin:10px 0}
+.fill-input{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;width:100%;outline:none;transition:border .2s;margin-top:6px}
+.fill-input:focus{border-color:#FFD700}
+.fill-input::placeholder{color:rgba(255,255,255,.4);font-weight:400}
+.check-btn{font-family:'Fredoka One',cursive;font-size:15px;padding:10px 24px;background:#A855F7;color:#fff;border:none;border-radius:50px;cursor:pointer;margin-top:10px;transition:all .2s}
+.check-btn:hover{transform:scale(1.05);background:#9333EA}
+.sight-word{font-family:'Fredoka One',cursive;font-size:48px;color:#FFD700;text-align:center;margin:16px 0;text-shadow:0 0 20px rgba(255,215,0,.5)}
+.anagram{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.letter-tile{width:44px;height:44px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:22px;color:#fff;cursor:pointer;transition:all .2s}
+.letter-tile:hover{background:rgba(255,255,255,.25)}
+.letter-tile.used{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.2);cursor:default}
+.answer-tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:54px;border-bottom:2px solid rgba(255,255,255,.2);padding-bottom:10px;margin-bottom:10px}
+.ans-tile{width:44px;height:44px;background:rgba(255,215,0,.2);border:2px solid #FFD700;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:22px;color:#FFD700;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="stars-bg" id="stars"></div>
+<div class="app">
+  <h1 class="title">🌟 Academia Tomy 🌟</h1>
+  <p class="subtitle">¡Aprendé jugando con tus personajes favoritos!</p>
+
+  <div class="score-bar">
+    <span class="score-label">Estrellas ganadas hoy</span>
+    <span class="score-val" id="total-score">⭐ 0</span>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn btn-poke active" onclick="showSection('pokemon')">⚡ Pokémon</button>
+    <button class="nav-btn btn-dino" onclick="showSection('dino')">🦕 Dinos</button>
+    <button class="nav-btn btn-foot" onclick="showSection('futbol')">⚽ Fútbol</button>
+    <button class="nav-btn btn-magic" onclick="showSection('magic')">🔮 Magia</button>
+    <button class="nav-btn btn-math" onclick="showSection('math')">🧮 Matemática</button>
+  </div>
+
+  <!-- POKEMON -->
+  <div class="section active" id="sec-pokemon">
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">⚡</span> English with Pokémon</div>
+      <div class="progress"><div class="progress-fill" id="poke-prog" style="width:0%"></div></div>
+      <div id="poke-game"></div>
+    </div>
+  </div>
+
+  <!-- DINOS -->
+  <div class="section" id="sec-dino">
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🦕</span> Count with Dinos!</div>
+      <div class="progress"><div class="progress-fill" id="dino-prog" style="width:0%"></div></div>
+      <div id="dino-game"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🦖</span> Dino Spelling</div>
+      <div id="dino-spell"></div>
+    </div>
+  </div>
+
+  <!-- FUTBOL -->
+  <div class="section" id="sec-futbol">
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">⚽</span> Fútbol Sums!</div>
+      <div class="progress"><div class="progress-fill" id="foot-prog" style="width:0%"></div></div>
+      <div id="foot-game"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🏆</span> World Cup Words</div>
+      <div id="wcup-game"></div>
+    </div>
+  </div>
+
+  <!-- MAGIC -->
+  <div class="section" id="sec-magic">
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🔮</span> Sight Words Spell!</div>
+      <div id="magic-game"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🧙</span> Unscramble the spell!</div>
+      <div id="anagram-game"></div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div class="section" id="sec-math">
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">🧮</span> Number Sequences</div>
+      <div id="seq-game"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="emoji-big">➕</span> Add &amp; Subtract</div>
+      <div id="addsub-game"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var totalScore=0;
+function addScore(n){totalScore+=n;document.getElementById('total-score').textContent='⭐ '+totalScore;}
+function showSection(name){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('sec-'+name).classList.add('active');
+  var map={pokemon:'btn-poke',dino:'btn-dino',futbol:'btn-foot',magic:'btn-magic',math:'btn-math'};
+  document.querySelectorAll('.'+map[name]).forEach(function(b){b.classList.add('active')});
+}
+(function makeStars(){
+  var c=document.getElementById('stars');
+  for(var i=0;i<80;i++){
+    var s=document.createElement('div');s.className='star';
+    var sz=(Math.random()*3+1)+'px';
+    s.style.cssText='width:'+sz+';height:'+sz+';top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;animation-delay:'+Math.random()*2+'s;animation-duration:'+(1.5+Math.random()*2)+'s';
+    c.appendChild(s);
+  }
+})();
+
+// ===== POKEMON =====
+var pokeQ=[
+  {q:"Pikachu is ___ Electric Pokémon.",img:"⚡🐭",choices:["a","an","the","some"],ans:0,hint:"Use 'a' before consonant sounds!"},
+  {q:"I can see ___ Arcanine!",img:"🔥🐕",choices:["a","an","the","some"],ans:0,hint:"Arcanine starts with a consonant!"},
+  {q:"Bulbasaur is ___ the garden.",img:"🌿🦎",choices:["in","on","under","at"],ans:0,hint:"Bulbasaur is inside!"},
+  {q:"Squirtle hides ___ the rock.",img:"💧🐢",choices:["under","in","on","next to"],ans:0,hint:"Squirtle goes below!"},
+  {q:"___ Eevee can evolve into many forms!",img:"🦊✨",choices:["The","A","An","Some"],ans:0,hint:"We know which Eevee!"},
+  {q:"Snorlax is sleeping ___ the road.",img:"😴🗻",choices:["on","in","under","above"],ans:0,hint:"On top of!"},
+  {q:"Jigglypuff ___ a beautiful song.",img:"🎵🌸",choices:["sings","sing","sang","is sing"],ans:0,hint:"Jigglypuff always sings!"},
+  {q:"There ___ many Magikarp in the river.",img:"🐟💦",choices:["are","is","was","be"],ans:0,hint:"Many things = 'are'!"},
+  {q:"Gengar ___ in the dark.",img:"👻🌙",choices:["hides","hide","hiding","hid"],ans:0,hint:"He always hides!"},
+  {q:"I ___ see a Mewtwo!",img:"🧬⚡",choices:["can","cans","could","am"],ans:0,hint:"I can / I can't!"},
+];
+var pokeIdx=0;
+function renderPoke(){
+  var q=pokeQ[pokeIdx%pokeQ.length];
+  document.getElementById('poke-prog').style.width=Math.round(pokeIdx/pokeQ.length*100)+'%';
+  var h='<div style="text-align:center;font-size:48px;margin-bottom:10px">'+q.img+'</div>';
+  h+='<p class="question">'+q.q+'</p><div class="choices">';
+  q.choices.forEach(function(c,i){h+='<button class="choice" onclick="checkPoke('+i+','+q.ans+')" id="pc'+i+'">'+c+'</button>'});
+  h+='</div><div id="poke-fb"></div>';
+  document.getElementById('poke-game').innerHTML=h;
+}
+function checkPoke(sel,ans){
+  document.querySelectorAll('.choice').forEach(function(b){b.onclick=null});
+  if(sel===ans){document.getElementById('pc'+sel).classList.add('correct');document.getElementById('poke-fb').innerHTML='<div class="feedback win">🎉 Excellent! +3 stars!</div><button class="next-btn" onclick="nextPoke()">Next Pokémon ▶</button>';addScore(3);}
+  else{document.getElementById('pc'+sel).classList.add('wrong');document.getElementById('pc'+ans).classList.add('correct');document.getElementById('poke-fb').innerHTML='<div class="feedback lose">💡 Tip: '+pokeQ[pokeIdx%pokeQ.length].hint+'</div><button class="next-btn" onclick="nextPoke()">Try next ▶</button>';}
+}
+function nextPoke(){pokeIdx++;renderPoke();}
+renderPoke();
+
+// ===== DINOS COUNT =====
+var dinoQ=[
+  {count:3,emoji:"🦕",options:[2,3,5,7]},{count:5,emoji:"🦖",options:[4,5,8,3]},
+  {count:7,emoji:"🐊",options:[6,7,9,5]},{count:4,emoji:"🦴",options:[3,4,6,8]},
+  {count:9,emoji:"🥚",options:[7,9,10,8]},{count:6,emoji:"🌿",options:[5,6,4,9]},
+  {count:10,emoji:"🦕",options:[8,10,7,6]},{count:8,emoji:"🦖",options:[7,8,10,5]},
+];
+var dinoIdx=0;
+function renderDino(){
+  var q=dinoQ[dinoIdx%dinoQ.length];
+  document.getElementById('dino-prog').style.width=Math.round(dinoIdx/dinoQ.length*100)+'%';
+  var row='';for(var i=0;i<q.count;i++)row+=q.emoji;
+  var opts='';q.options.forEach(function(n,i){opts+='<button class="num-choice" onclick="checkDino('+n+','+q.count+','+i+')" id="dc'+i+'">'+n+'</button>'});
+  document.getElementById('dino-game').innerHTML='<div class="count-game"><p class="question" style="color:#86EFAC;text-align:center">Contá los dinosaurios!</p><div class="dino-row">'+row+'</div><div class="num-choices">'+opts+'</div><div id="dino-fb" style="margin-top:12px"></div></div>';
+}
+function checkDino(val,correct,idx){
+  document.querySelectorAll('.num-choice').forEach(function(b){b.onclick=null});
+  if(val===correct){document.getElementById('dc'+idx).classList.add('correct');document.getElementById('dino-fb').innerHTML='<div class="feedback win">🦕 ¡Perfecto! +2 stars!</div><button class="next-btn" onclick="nextDino()">Siguiente ▶</button>';addScore(2);}
+  else{document.getElementById('dc'+idx).classList.add('wrong');document.getElementById('dino-fb').innerHTML='<div class="feedback lose">🦖 Eran '+correct+'</div><button class="next-btn" onclick="nextDino()">Siguiente ▶</button>';}
+}
+function nextDino(){dinoIdx++;renderDino();}
+renderDino();
+
+// ===== DINO SPELL =====
+var dinoWords=[
+  {word:"STEGO",emoji:"🦕",hint:"Has spikes on its back"},
+  {word:"RAPTOR",emoji:"🐉",hint:"Very fast and clever"},
+  {word:"FOSSIL",emoji:"🦴",hint:"Old dinosaur bones"},
+  {word:"TREX",emoji:"🦖",hint:"King of the dinos"},
+  {word:"CLAW",emoji:"🦴",hint:"Sharp dino finger"},
+  {word:"NEST",emoji:"🥚",hint:"Where dino eggs go"},
+];
+var dwIdx=0,dwAnswer=[],dwLetters=[];
+function renderDinoSpell(){
+  var w=dinoWords[dwIdx%dinoWords.length];dwAnswer=[];
+  dwLetters=w.word.split('').map(function(l,i){return{l:l,id:i,used:false}});
+  var shuffled=dwLetters.slice().sort(function(){return Math.random()-.5});
+  var tiles=shuffled.map(function(lt){return'<div class="letter-tile" id="dlt'+lt.id+'" onclick="pickDinoL('+lt.id+')">'+lt.l+'</div>'}).join('');
+  document.getElementById('dino-spell').innerHTML='<div style="text-align:center;font-size:40px;margin-bottom:8px">'+w.emoji+'</div><p class="question" style="color:#86EFAC;text-align:center">Hint: '+w.hint+'</p><div class="answer-tiles" id="dw-ans"></div><div class="anagram">'+tiles+'</div><button class="check-btn" onclick="checkDinoSpell()">Check!</button> <button onclick="clearDinoSpell()" style="padding:10px 18px;background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:50px;cursor:pointer;font-family:Nunito,sans-serif;margin-top:10px">↩ Clear</button><div id="dw-fb" style="margin-top:10px"></div>';
+}
+function pickDinoL(id){var lt=dwLetters.find(function(x){return x.id===id});if(lt.used)return;lt.used=true;dwAnswer.push(lt);document.getElementById('dlt'+id).classList.add('used');document.getElementById('dw-ans').innerHTML=dwAnswer.map(function(x){return'<div class="ans-tile">'+x.l+'</div>'}).join('');}
+function clearDinoSpell(){dwAnswer=[];dwLetters.forEach(function(lt){lt.used=false;var el=document.getElementById('dlt'+lt.id);if(el)el.classList.remove('used')});document.getElementById('dw-ans').innerHTML='';}
+function checkDinoSpell(){var w=dinoWords[dwIdx%dinoWords.length];var typed=dwAnswer.map(function(x){return x.l}).join('');var fb=document.getElementById('dw-fb');if(typed===w.word){fb.innerHTML='<div class="feedback win">Amazing! +4 stars!</div><button class="next-btn" onclick="nextDinoSpell()">Next dino ▶</button>';addScore(4);}else{fb.innerHTML='<div class="feedback lose">The word was: <strong>'+w.word+'</strong></div><button class="next-btn" onclick="nextDinoSpell()">Next ▶</button>';}}
+function nextDinoSpell(){dwIdx++;renderDinoSpell();}
+renderDinoSpell();
+
+// ===== FUTBOL MATH =====
+var footQ=[
+  {a:12,b:7,op:'+',ans:19,emoji:"⚽",story:"El equipo metió 12 goles ayer y 7 hoy."},
+  {a:20,b:8,op:'-',ans:12,emoji:"🥅",story:"Había 20 pelotas, se perdieron 8."},
+  {a:15,b:6,op:'+',ans:21,emoji:"👟",story:"Messi tiene 15 medallas y gana 6 más."},
+  {a:30,b:14,op:'-',ans:16,emoji:"🏆",story:"El estadio tiene 30 filas, 14 están llenas."},
+  {a:11,b:11,op:'+',ans:22,emoji:"⭐",story:"Hay 11 jugadores en cada equipo."},
+  {a:45,b:13,op:'+',ans:58,emoji:"📋",story:"El partido duró 45 min + 13 min extra."},
+  {a:50,b:27,op:'-',ans:23,emoji:"⚽",story:"El estadio tenía 50 bancas, quedan 27 vacías."},
+  {a:33,b:17,op:'+',ans:50,emoji:"🥇",story:"Argentina hizo 33 goles + 17 en el mundial."},
+];
+var footIdx=0;
+function renderFoot(){
+  var p=footQ[footIdx%footQ.length];
+  document.getElementById('foot-prog').style.width=Math.round(footIdx/footQ.length*100)+'%';
+  document.getElementById('foot-game').innerHTML='<div style="text-align:center;font-size:40px;margin:8px 0">'+p.emoji+'</div><p class="question" style="text-align:center">'+p.story+'</p><div class="sum-display">'+p.a+' '+p.op+' '+p.b+' = ?</div><input class="fill-input" id="foot-ans" type="number" placeholder="Tu respuesta..."><br><button class="check-btn" onclick="checkFoot('+p.ans+')">⚽ Shoot!</button><div id="foot-fb" style="margin-top:10px"></div>';
+}
+function checkFoot(ans){var val=parseInt(document.getElementById('foot-ans').value);if(val===ans){document.getElementById('foot-fb').innerHTML='<div class="feedback win">🥅 GOOOOL! +3 stars!</div><button class="next-btn" onclick="nextFoot()">Próximo ▶</button>';addScore(3);}else{document.getElementById('foot-fb').innerHTML='<div class="feedback lose">La respuesta era '+ans+'</div><button class="next-btn" onclick="nextFoot()">Próximo ▶</button>';}}
+function nextFoot(){footIdx++;renderFoot();}
+renderFoot();
+
+// ===== WORLD CUP WORDS =====
+var wcW=[
+  {word:"GOAL",emoji:"🥅",hint:"When the ball goes in!"},
+  {word:"TEAM",emoji:"👕",hint:"Players together"},
+  {word:"BALL",emoji:"⚽",hint:"You kick this"},
+  {word:"WIN",emoji:"🏆",hint:"To be the best"},
+  {word:"RUN",emoji:"💨",hint:"Move your feet fast"},
+  {word:"CUP",emoji:"🥇",hint:"The big trophy"},
+  {word:"KICK",emoji:"👟",hint:"What you do to the ball"},
+  {word:"PASS",emoji:"🤝",hint:"Give it to a teammate"},
+];
+var wcIdx=0;
+function renderWCup(){var w=wcW[wcIdx%wcW.length];document.getElementById('wcup-game').innerHTML='<div style="text-align:center;font-size:48px;margin:8px 0">'+w.emoji+'</div><p class="question" style="text-align:center;color:#93C5FD">Hint: '+w.hint+'</p><p class="question" style="text-align:center">Type the English word:</p><input class="fill-input" id="wc-ans" type="text" placeholder="Write here..." style="text-transform:uppercase;text-align:center"><br><button class="check-btn" onclick="checkWCup()">Check!</button><div id="wc-fb" style="margin-top:10px"></div>';}
+function checkWCup(){var w=wcW[wcIdx%wcW.length];var val=document.getElementById('wc-ans').value.toUpperCase().trim();if(val===w.word){document.getElementById('wc-fb').innerHTML='<div class="feedback win">🏆 Correct! The word is '+w.word+'! +3 stars!</div><button class="next-btn" onclick="nextWCup()">Next word ▶</button>';addScore(3);}else{document.getElementById('wc-fb').innerHTML='<div class="feedback lose">The word was: <strong>'+w.word+'</strong></div><button class="next-btn" onclick="nextWCup()">Next ▶</button>';}}
+function nextWCup(){wcIdx++;renderWCup();}
+renderWCup();
+
+// ===== SIGHT WORDS =====
+var swWords=["WE","THEY","CAN","THE","SHE","HE","IS","ARE","AND","BUT","RUN","SUN","MUM","BUS","CUP","UNDER","BALL","PLAY","ON","IN","UP","BIG","FUN","CUT","JUG","MUG","DID","HAS","HER","HIM"];
+var swIdx=0;
+function renderMagic(){var w=swWords[swIdx%swWords.length];document.getElementById('magic-game').innerHTML='<p class="question" style="text-align:center;color:#D8B4FE">Memorizá la palabra mágica!</p><div class="sight-word">✨ '+w+' ✨</div><p class="question" style="text-align:center">Now close your eyes and type it!</p><input class="fill-input" id="sw-ans" type="text" placeholder="Spell the magic word..." style="text-transform:uppercase;text-align:center"><br><button class="check-btn" style="background:#7C3AED" onclick="checkSight()">🔮 Cast the spell!</button><div id="sw-fb" style="margin-top:10px"></div>';}
+function checkSight(){var w=swWords[swIdx%swWords.length];var val=document.getElementById('sw-ans').value.toUpperCase().trim();if(val===w){document.getElementById('sw-fb').innerHTML='<div class="feedback win">The spell worked! +3 stars!</div><button class="next-btn" style="background:#7C3AED" onclick="nextSight()">Next spell ▶</button>';addScore(3);}else{document.getElementById('sw-fb').innerHTML='<div class="feedback lose">The word was: <strong>'+w+'</strong></div><button class="next-btn" style="background:#7C3AED" onclick="nextSight()">Next ▶</button>';}}
+function nextSight(){swIdx++;renderMagic();}
+renderMagic();
+
+// ===== ANAGRAM =====
+var anW=[
+  {word:"DRAGON",emoji:"🐉",hint:"A magical fire creature"},
+  {word:"UNICORN",emoji:"🦄",hint:"A horse with a horn"},
+  {word:"WIZARD",emoji:"🧙",hint:"Uses magic spells"},
+  {word:"POTION",emoji:"🧪",hint:"A magical drink"},
+  {word:"SPELL",emoji:"✨",hint:"Magic words"},
+  {word:"WAND",emoji:"🪄",hint:"A magic stick"},
+  {word:"CLOUD",emoji:"☁️",hint:"Floats in the sky"},
+];
+var anIdx=0,anAnswer=[],anLetters=[];
+function renderAnagram(){
+  var w=anW[anIdx%anW.length];anAnswer=[];
+  anLetters=w.word.split('').map(function(l,i){return{l:l,id:i,used:false}});
+  var shuffled=anLetters.slice().sort(function(){return Math.random()-.5});
+  var tiles=shuffled.map(function(lt){return'<div class="letter-tile" id="alt'+lt.id+'" onclick="pickAnL('+lt.id+')">'+lt.l+'</div>'}).join('');
+  document.getElementById('anagram-game').innerHTML='<div style="text-align:center;font-size:40px;margin-bottom:8px">'+w.emoji+'</div><p class="question" style="color:#D8B4FE;text-align:center">Hint: '+w.hint+'</p><div class="answer-tiles" id="an-ans"></div><div class="anagram">'+tiles+'</div><button class="check-btn" style="background:#7C3AED" onclick="checkAn()">Cast!</button> <button onclick="clearAn()" style="padding:10px 18px;background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:50px;cursor:pointer;font-family:Nunito,sans-serif;margin-top:10px">↩ Clear</button><div id="an-fb" style="margin-top:10px"></div>';
+}
+function pickAnL(id){var lt=anLetters.find(function(x){return x.id===id});if(lt.used)return;lt.used=true;anAnswer.push(lt);document.getElementById('alt'+id).classList.add('used');document.getElementById('an-ans').innerHTML=anAnswer.map(function(x){return'<div class="ans-tile">'+x.l+'</div>'}).join('');}
+function clearAn(){anAnswer=[];anLetters.forEach(function(lt){lt.used=false;var el=document.getElementById('alt'+lt.id);if(el)el.classList.remove('used')});document.getElementById('an-ans').innerHTML='';}
+function checkAn(){var w=anW[anIdx%anW.length];var typed=anAnswer.map(function(x){return x.l}).join('');if(typed===w.word){document.getElementById('an-fb').innerHTML='<div class="feedback win">You unscrambled the spell! +5 stars!</div><button class="next-btn" style="background:#7C3AED" onclick="nextAn()">Next ▶</button>';addScore(5);}else{document.getElementById('an-fb').innerHTML='<div class="feedback lose">The word was: <strong>'+w.word+'</strong></div><button class="next-btn" style="background:#7C3AED" onclick="nextAn()">Next ▶</button>';}}
+function nextAn(){anIdx++;renderAnagram();}
+renderAnagram();
+
+// ===== SEQUENCES =====
+var seqQ=[
+  {seq:[2,4,6,8,10],missing:4,pos:2,step:2,emoji:"🦕"},
+  {seq:[5,10,15,20,25],missing:15,pos:3,step:5,emoji:"⚽"},
+  {seq:[10,20,30,40,50],missing:20,pos:2,step:10,emoji:"⭐"},
+  {seq:[3,6,9,12,15],missing:9,pos:3,step:3,emoji:"🔮"},
+  {seq:[1,3,5,7,9],missing:5,pos:3,step:2,emoji:"⚡"},
+  {seq:[4,8,12,16,20],missing:16,pos:4,step:4,emoji:"🏆"},
+  {seq:[6,12,18,24,30],missing:12,pos:2,step:6,emoji:"🦄"},
+  {seq:[7,14,21,28,35],missing:21,pos:3,step:7,emoji:"🐉"},
+];
+var seqIdx=0;
+function renderSeq(){
+  var s=seqQ[seqIdx%seqQ.length];
+  var display=s.seq.map(function(n,i){
+    if(i===s.pos-1)return'<span style="display:inline-flex;width:44px;height:44px;background:rgba(255,215,0,.2);border:2px dashed #FFD700;border-radius:10px;font-family:Fredoka One,cursive;font-size:22px;color:#FFD700;align-items:center;justify-content:center">?</span>';
+    return'<span style="display:inline-flex;width:44px;height:44px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);border-radius:10px;font-family:Fredoka One,cursive;font-size:22px;color:#fff;align-items:center;justify-content:center">'+n+'</span>';
+  }).join('<span style="color:#FFD700;font-size:20px;margin:0 4px">→</span>');
+  document.getElementById('seq-game').innerHTML='<div style="text-align:center;font-size:36px;margin-bottom:8px">'+s.emoji+'</div><p class="question" style="text-align:center;color:#86EFAC">¿Qué número falta? (de '+s.step+' en '+s.step+')</p><div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:12px 0">'+display+'</div><input class="fill-input" id="seq-ans" type="number" placeholder="El número que falta..." style="text-align:center"><br><button class="check-btn" style="background:#F59E0B;color:#1a0a2e" onclick="checkSeq('+s.missing+')">Check!</button><div id="seq-fb" style="margin-top:10px"></div>';
+}
+function checkSeq(ans){var val=parseInt(document.getElementById('seq-ans').value);if(val===ans){document.getElementById('seq-fb').innerHTML='<div class="feedback win">Genial! +3 stars!</div><button class="next-btn" style="background:#F59E0B;color:#1a0a2e" onclick="nextSeq()">Siguiente ▶</button>';addScore(3);}else{document.getElementById('seq-fb').innerHTML='<div class="feedback lose">El número era '+ans+'</div><button class="next-btn" style="background:#F59E0B;color:#1a0a2e" onclick="nextSeq()">Siguiente ▶</button>';}}
+function nextSeq(){seqIdx++;renderSeq();}
+renderSeq();
+
+// ===== ADD / SUBTRACT =====
+var asQ=[
+  {a:25,b:13,op:'+',ans:38,emoji:"🦕"},{a:47,b:21,op:'-',ans:26,emoji:"🔮"},
+  {a:34,b:15,op:'+',ans:49,emoji:"⚽"},{a:60,b:28,op:'-',ans:32,emoji:"⭐"},
+  {a:42,b:37,op:'+',ans:79,emoji:"⚡"},{a:85,b:33,op:'-',ans:52,emoji:"🏆"},
+  {a:16,b:24,op:'+',ans:40,emoji:"🦖"},{a:70,b:45,op:'-',ans:25,emoji:"🌙"},
+  {a:55,b:28,op:'+',ans:83,emoji:"🐉"},{a:91,b:36,op:'-',ans:55,emoji:"🦄"},
+];
+var asIdx=0;
+function renderAddSub(){var p=asQ[asIdx%asQ.length];document.getElementById('addsub-game').innerHTML='<div style="text-align:center;font-size:36px;margin:8px 0">'+p.emoji+'</div><div class="sum-display">'+p.a+' '+p.op+' '+p.b+' = ?</div><input class="fill-input" id="as-ans" type="number" placeholder="Tu respuesta..." style="text-align:center"><br><button class="check-btn" style="background:#F59E0B;color:#1a0a2e" onclick="checkAS('+p.ans+')">Resolver!</button><div id="as-fb" style="margin-top:10px"></div>';}
+function checkAS(ans){var val=parseInt(document.getElementById('as-ans').value);if(val===ans){document.getElementById('as-fb').innerHTML='<div class="feedback win">Correcto! +3 stars!</div><button class="next-btn" style="background:#F59E0B;color:#1a0a2e" onclick="nextAS()">Siguiente ▶</button>';addScore(3);}else{document.getElementById('as-fb').innerHTML='<div class="feedback lose">La respuesta era '+ans+'</div><button class="next-btn" style="background:#F59E0B;color:#1a0a2e" onclick="nextAS()">Siguiente ▶</button>';}}
+function nextAS(){asIdx++;renderAddSub();}
+renderAddSub();
+</script>
+</body>
+</html>
